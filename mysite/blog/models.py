@@ -6,18 +6,17 @@ from django.urls import reverse
 
 class PublishedManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset()\
-                        .filter(status=Post.Status.PUBLISHED)
+        return super().get_queryset() \
+            .filter(status=Post.Status.PUBLISHED)
 
 
 class DraftManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset()\
-                        .filter(status=Post.Status.DRAFT)
+        return super().get_queryset() \
+            .filter(status=Post.Status.DRAFT)
 
 
 class Post(models.Model):
-
     class Status(models.TextChoices):
         DRAFT = 'DF', "Draft"
         PUBLISHED = 'PB', "Published"
@@ -49,5 +48,8 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('blog:post_detail', args=[self.id])
-
+        return reverse('blog:post_detail', args=[
+            self.publish.year,
+            self.publish.month,
+            self.publish.day,
+            self.slug])
